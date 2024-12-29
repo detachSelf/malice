@@ -1,16 +1,20 @@
 import { Router } from "express";
 
-const testRouter = Router();
+const router = Router();
 
-testRouter.post("/echo", (req, res) => {
-  const { message } = req.body;
-
+router.post("/echo", (req, res) => {
+  console.log("Received body:", req.body);
+  const { message } = req.body || {};
   if (!message) {
-    return res.status(400).json({ error: "No message provided" });
+    return res.status(400).json({ error: "Message is required" });
   }
-
-  const modifiedMessage = `API received: ${message}`;
-  res.json({ original: message, modified: modifiedMessage });
+  res.json({ echoedMessage: `Server received: ${message}` });
 });
 
-export default testRouter;
+
+router.all("*", (req, res) => {
+  res.status(404).send(`Route ${req.method} ${req.originalUrl} not found.`);
+});
+
+
+export default router;
