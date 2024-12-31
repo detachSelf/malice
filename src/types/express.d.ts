@@ -1,9 +1,11 @@
-import 'express';
+// src/types/express.d.ts
+
+import { JwtPayload } from 'jsonwebtoken';
 
 declare global {
-    namespace Express {
-        interface Request {
-            user?: any; // Replace `any` with your actual user object type if known
-        }
+  namespace Express {
+    interface Request {
+      user?: string | JwtPayload;
     }
+  }
 }

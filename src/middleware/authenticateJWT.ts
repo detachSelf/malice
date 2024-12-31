@@ -1,15 +1,32 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { ENV } from "../config/env";
 
-export const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) return res.status(401).json({ message: "Missing token" });
+// Extend the Express Request interface to include the `user` property
+declare global {
+  namespace Express {
+    interface Request {
+      user?: string | JwtPayload;
+    }
+  }
+}
 
+export const authenticateJWT = (req: Request, res: Response, next: NextFunction): void => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    res.status(401).json({ message: "Missing or malformed token" });
+    return; // Ensure the function exits after sending a response
+  }
+
+  const token = authHeader.split(" ")[1]; // Extract token after 'Bearer'
   try {
-    req.user = jwt.verify(token, ENV.JWT_SECRET);
-    next();
+    const decoded = jwt.verify(token, ENV.JWT_SECRET as string); // Verify token using the secret
+    req.user = decoded; // Attach the decoded token to req.user
+    next(); // Proceed to the next middleware or route handler
   } catch (err) {
-    res.status(403).json({ message: "Invalid token" });
+    console.error("JWT Verification Error:", err);
+    res.status(403).json({ message: "Invalid or expired token" });
+    return; // Ensure the function exits after sending a response
   }
 };
