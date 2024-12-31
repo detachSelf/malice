@@ -1,10 +1,11 @@
 import dotenv from "dotenv";
 import express from "express";
 import testRoutes from "./routes/test.routes";
+import app from './index';
 
 dotenv.config();
 
-const app = express();
+// const app = express(); // imported from .index
 const port = process.env.PORT || 3333;
 
 // Middleware to parse JSON

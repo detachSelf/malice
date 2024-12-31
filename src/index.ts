@@ -1,6 +1,9 @@
 import bodyParser from "body-parser";
 import express from "express";
 import pg from "pg";
+import authRoutes from './routes/auth.routes';
+import { authenticateJWT } from './middleware/authenticateJWT';
+
 
 // Connect to the database using the DATABASE_URL environment
 //   variable injected by Railway
@@ -13,10 +16,13 @@ const pool = new pg.Pool({
 const app = express();
 const port = process.env.PORT || 3333;
 
+// Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.raw({ type: "application/vnd.custom-type" }));
 app.use(bodyParser.text({ type: "text/html" }));
+app.use('/auth', authRoutes);
 
+// Routes
 app.get("/", async (req, res) => {
   try {
     const { rows } = await pool.query("SELECT NOW()");
@@ -27,7 +33,14 @@ app.get("/", async (req, res) => {
   }
 });
 
+// Protected route example
+app.get('/protected', authenticateJWT, (req, res) => {
+  res.json({ message: 'This is a protected route', user: req.user });
+});
+
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
+
+export default app;
