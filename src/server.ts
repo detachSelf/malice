@@ -7,6 +7,7 @@ dotenv.config();
 
 // const app = express(); // imported from .index
 const port = process.env.PORT || 3333;
+console.log('Set env.PORT');
 
 // Middleware to parse JSON
 app.use(express.json());
