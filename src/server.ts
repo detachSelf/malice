@@ -5,7 +5,7 @@ import app from './index';
 
 dotenv.config();
 
-// const app = express(); // imported from .index
+// const app = express(); // imported from index
 const port = process.env.PORT || 3333;
 console.log('Set env.PORT');
 
@@ -40,7 +40,7 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 console.log("Loaded PORT:", process.env.PORT);
 console.log("Loaded JWT_SECRET:", process.env.JWT_SECRET);
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+// // Start the server
+// app.listen(port, () => {
+//   console.log(`Server running on http://localhost:${port}`);
+// });

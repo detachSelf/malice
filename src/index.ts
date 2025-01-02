@@ -4,13 +4,9 @@ import pg from "pg";
 import authRoutes from './routes/auth.routes';
 import { authenticateJWT } from './middleware/authenticateJWT';
 
-
-// Connect to the database using the DATABASE_URL environment
-//   variable injected by Railway
-// TESTING the thing right now!
 const pool = new pg.Pool({
   max: 100, // Maximum number of clients
-  idleTimeoutMillis: 300000, // Close idle clients after 5 min
+  idleTimeoutMillis: 300000, // Close idle clients after 5 minutes
 });
 
 const app = express();
@@ -40,7 +36,7 @@ app.get('/protected', authenticateJWT, (req, res) => {
 
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`Hithere! App listening at http://localhost:${port}`);
 });
 
 export default app;

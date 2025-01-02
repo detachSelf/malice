@@ -4,7 +4,6 @@ import pg from "pg";
 import authRoutes from './routes/auth.routes';
 import { authenticateJWT } from './middleware/authenticateJWT';
 
-
 const pool = new pg.Pool({
   max: 100,
   idleTimeoutMillis: 300000,
@@ -17,7 +16,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.raw({ type: "application/vnd.custom-type" }));
 app.use(bodyParser.text({ type: "text/html" }));
 app.use('/auth', authRoutes);
-
 
 // Routes
 app.get("/", async (req, res) => {
