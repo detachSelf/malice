@@ -17,6 +17,15 @@ app.use((req, res, next) => {
   next();
 });
 
+// Define a test route directly in server.ts for quick testing
+app.post("/test/echo", (req, res) => {
+  const { message } = req.body;
+  if (!message) {
+    return res.status(400).json({ error: "Message is required" });
+  }
+  res.json({ echoedMessage: `Server received: ${message}` });
+});
+
 // Use the test route from routes/test.routes.ts
 app.use("/test", testRoutes);
 
@@ -30,7 +39,7 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 console.log("Loaded PORT:", process.env.PORT);
 console.log("Loaded JWT_SECRET:", process.env.JWT_SECRET);
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+// Do not uncomment the next line to avoid starting the server again
+// app.listen(port, () => {
+//   console.log(`Server running on http://localhost:${port}`);
+// });
